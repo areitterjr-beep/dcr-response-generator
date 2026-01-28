@@ -27,7 +27,15 @@
                     <input type="text" id="adoOrg" placeholder="https://office.visualstudio.com">
                     <label for="adoPat">Personal Access Token (PAT)</label>
                     <input type="password" id="adoPat" placeholder="Enter your PAT token">
-                    <p class="help-text">Create a PAT with "Work Items: Read" scope in Azure DevOps → User Settings → Personal Access Tokens</p>
+                    <p class="help-text">
+                        <strong>To create a PAT:</strong><br>
+                        1. Go to <a href="https://office.visualstudio.com/_usersSettings/tokens" target="_blank">office.visualstudio.com/_usersSettings/tokens</a><br>
+                        2. Click "New Token"<br>
+                        3. Name it (e.g., "DCR Generator")<br>
+                        4. Set expiration (e.g., 90 days)<br>
+                        5. Under Scopes, select "Work Items" → "Read"<br>
+                        6. Click "Create" and copy the token immediately
+                    </p>
                 </div>
                 <div class="settings-group">
                     <h3>Azure OpenAI</h3>
@@ -37,7 +45,14 @@
                     <input type="text" id="aoaiDeployment" placeholder="gpt-4o">
                     <label for="aoaiToken">Access Token</label>
                     <input type="password" id="aoaiToken" placeholder="Paste your Azure CLI token here">
-                    <p class="help-text">Get a token by running in terminal: <code>az account get-access-token --resource https://cognitiveservices.azure.com --query accessToken -o tsv</code></p>
+                    <p class="help-text">
+                        <strong>To get an access token:</strong><br>
+                        1. Install <a href="https://docs.microsoft.com/en-us/cli/azure/install-azure-cli" target="_blank">Azure CLI</a> if not already installed<br>
+                        2. Run <code>az login</code> to sign in with your Microsoft account<br>
+                        3. Run <code>az account set --subscription ffd9b2d9-89e3-4cbd-9f28-fe927ef9e4e9</code><br>
+                        4. Run this command and paste the output:<br>
+                        <code>az account get-access-token --resource https://cognitiveservices.azure.com --query accessToken -o tsv</code>
+                    </p>
                     <button class="btn btn-small" id="refreshTokenBtn" type="button">Token expires in ~1 hour - click to check status</button>
                 </div>
                 <button class="btn btn-secondary" id="saveSettings">Save Settings</button>
