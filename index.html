@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DCR Response Generator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>DCR Response Generator</h1>
+            <p class="subtitle">Generate customer-friendly responses for Design Change Requests</p>
+        </header>
+
+        <!-- Settings Panel -->
+        <section class="settings-panel">
+            <button class="settings-toggle" id="settingsToggle">
+                <span class="settings-icon">&#9881;</span>
+                Settings
+                <span class="toggle-arrow" id="toggleArrow">&#9662;</span>
+            </button>
+            <div class="settings-content" id="settingsContent">
+                <div class="settings-group">
+                    <h3>Azure DevOps</h3>
+                    <label for="adoOrg">Organization URL</label>
+                    <input type="text" id="adoOrg" placeholder="https://office.visualstudio.com">
+                    <label for="adoPat">Personal Access Token (PAT)</label>
+                    <input type="password" id="adoPat" placeholder="Enter your PAT token">
+                    <p class="help-text">Create a PAT with "Work Items: Read" scope in Azure DevOps → User Settings → Personal Access Tokens</p>
+                </div>
+                <div class="settings-group">
+                    <h3>Azure OpenAI</h3>
+                    <label for="aoaiEndpoint">Endpoint</label>
+                    <input type="text" id="aoaiEndpoint" placeholder="https://your-resource.openai.azure.com">
+                    <label for="aoaiDeployment">Deployment Name</label>
+                    <input type="text" id="aoaiDeployment" placeholder="gpt-4o">
+                    <label for="aoaiToken">Access Token</label>
+                    <input type="password" id="aoaiToken" placeholder="Paste your Azure CLI token here">
+                    <p class="help-text">Get a token by running in terminal: <code>az account get-access-token --resource https://cognitiveservices.azure.com --query accessToken -o tsv</code></p>
+                    <button class="btn btn-small" id="refreshTokenBtn" type="button">Token expires in ~1 hour - click to check status</button>
+                </div>
+                <button class="btn btn-secondary" id="saveSettings">Save Settings</button>
+                <span class="save-indicator" id="saveIndicator"></span>
+            </div>
+        </section>
+
+        <!-- Main Input Section -->
+        <section class="input-section">
+            <label for="workItemUrl">Azure DevOps Work Item URL</label>
+            <div class="input-group">
+                <input type="text" id="workItemUrl" placeholder="Paste work item link (e.g., https://office.visualstudio.com/OC/_workitems/edit/12345)">
+                <button class="btn btn-primary" id="fetchBtn">Fetch</button>
+            </div>
+            <div class="drop-zone" id="dropZone">
+                <p>Or drag and drop a work item link here</p>
+            </div>
+        </section>
+
+        <!-- Work Item Preview -->
+        <section class="preview-section" id="previewSection">
+            <h2>Work Item Details</h2>
+            <div class="work-item-card" id="workItemCard">
+                <div class="work-item-header">
+                    <span class="work-item-type" id="wiType">Bug</span>
+                    <span class="work-item-id" id="wiId">#12345</span>
+                </div>
+                <h3 class="work-item-title" id="wiTitle">Loading...</h3>
+                <div class="work-item-meta">
+                    <span><strong>State:</strong> <span id="wiState">-</span></span>
+                    <span><strong>Area:</strong> <span id="wiArea">-</span></span>
+                    <span><strong>Assigned To:</strong> <span id="wiAssigned">-</span></span>
+                </div>
+                <div class="work-item-description" id="wiDescription">
+                    <h4>Description</h4>
+                    <div class="description-content" id="wiDescContent"></div>
+                </div>
+                <div class="additional-context">
+                    <label for="additionalContext">Additional Context (optional)</label>
+                    <textarea id="additionalContext" rows="6" placeholder="Add any additional context to guide the response (e.g., specific workarounds, reasons for rejection, customer history, etc.)"></textarea>
+                </div>
+            </div>
+            <button class="btn btn-primary btn-large" id="generateBtn">Generate Response</button>
+        </section>
+
+        <!-- Generated Response -->
+        <section class="response-section" id="responseSection">
+            <h2>Generated Response</h2>
+            <div class="response-container">
+                <textarea id="responseText" rows="15" placeholder="Generated response will appear here..."></textarea>
+                <div class="response-actions">
+                    <button class="btn btn-secondary" id="regenerateBtn">Regenerate</button>
+                    <button class="btn btn-primary" id="copyBtn">Copy to Clipboard</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Status/Error Messages -->
+        <div class="status-bar" id="statusBar">
+            <span class="status-message" id="statusMessage"></span>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
