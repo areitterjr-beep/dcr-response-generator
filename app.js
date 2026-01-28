@@ -369,23 +369,49 @@ Generate a complete, ready-to-send response following the structure provided. Ma
 - ONLY mention a workaround if one is explicitly stated in the description or additional context above - do NOT make up workarounds
 - Keep the response professional but warm`;
 
-        const apiUrl = `${settings.aoaiEndpoint}/openai/deployments/${settings.aoaiDeployment}/chat/completions?api-version=2024-02-15-preview`;
+        // Use proxy to bypass CORS when not on localhost
+        const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        const proxyUrl = 'https://dcr-proxy.a-reitterjr.workers.dev';
 
-        const response = await fetch(apiUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${settings.aoaiToken}`
-            },
-            body: JSON.stringify({
-                messages: [
-                    { role: 'system', content: systemPrompt },
-                    { role: 'user', content: userPrompt }
-                ],
-                max_tokens: 1500,
-                temperature: 0.7
-            })
-        });
+        let response;
+        if (isLocalhost) {
+            // Direct call for local development
+            const apiUrl = `${settings.aoaiEndpoint}/openai/deployments/${settings.aoaiDeployment}/chat/completions?api-version=2024-02-15-preview`;
+            response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${settings.aoaiToken}`
+                },
+                body: JSON.stringify({
+                    messages: [
+                        { role: 'system', content: systemPrompt },
+                        { role: 'user', content: userPrompt }
+                    ],
+                    max_tokens: 1500,
+                    temperature: 0.7
+                })
+            });
+        } else {
+            // Use proxy for deployed version
+            response = await fetch(proxyUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    endpoint: settings.aoaiEndpoint,
+                    deployment: settings.aoaiDeployment,
+                    token: settings.aoaiToken,
+                    messages: [
+                        { role: 'system', content: systemPrompt },
+                        { role: 'user', content: userPrompt }
+                    ],
+                    max_tokens: 1500,
+                    temperature: 0.7
+                })
+            });
+        }
 
         if (!response.ok) {
             const errorData = await response.json().catch(() => ({}));
