@@ -329,12 +329,12 @@ async function generateResponse() {
         const systemPrompt = `You are a professional technical writer for Microsoft. Your task is to write customer-friendly rejection responses for Design Change Requests (DCRs).
 
 IMPORTANT FORMAT REQUIREMENTS:
-- Start the response with "Customer Friendly Rejection" on its own line, followed by a blank line
+- Do NOT include any header like "Customer Friendly Rejection" or similar
 - Do NOT include any salutation like "Dear [Customer]" or "Dear [Name]"
 - Do NOT include any sign-off like "Warm regards", "Best regards", signature blocks, or names at the end
-- Jump straight into the content after the header
+- Start directly with the response content
 
-The response content should follow this structure:
+The response should follow this structure:
 1. Opening: Thank the customer for submitting the DCR and acknowledge the specific request and business context they provided.
 2. Rejection: Clearly but kindly state that we cannot proceed with this change at this time. Provide a technical or business reason (e.g., significant cross-platform changes required, current roadmap priorities focused on reliability/performance/cross-platform consistency, etc.).
 3. Workaround: ONLY include a workaround section if a specific workaround is explicitly mentioned in the work item description or additional context. Do NOT invent or suggest workarounds on your own. If no workaround is provided, skip this section entirely.
@@ -362,7 +362,7 @@ ${additionalContext}`;
         userPrompt += `
 
 Generate a complete, ready-to-send response following the structure provided. Make sure to:
-- Start with "Customer Friendly Rejection" header followed by a blank line
+- Start directly with the response content - no headers or titles
 - Do NOT include any "Dear..." salutation or "Warm regards" sign-off
 - Reference the specific feature/change they requested
 - Acknowledge their business context if mentioned
