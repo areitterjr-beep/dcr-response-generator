@@ -121,7 +121,7 @@ function saveSettings() {
         adoPat: adoPatInput.value.trim(),
         aoaiEndpoint: aoaiEndpointInput.value.trim(),
         aoaiDeployment: aoaiDeploymentInput.value.trim(),
-        aoaiToken: aoaiTokenInput.value.trim()
+        aoaiToken: aoaiTokenInput.value.replace(/\s/g, '') // Remove ALL whitespace from token
     };
     localStorage.setItem('dcrGenSettings', JSON.stringify(settings));
     saveIndicator.textContent = 'Saved!';
